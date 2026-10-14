@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cheat Chanmoniza | Portfolio CV</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #0c0a0b; }
+      iframe { display: block; width: 100%; height: 100%; border: 0; }
+      .fallback { color: #e5e5e5; font: 16px/1.5 system-ui, sans-serif; padding: 2rem; }
+      .fallback a { color: #a78bfa; }
+    </style>
+  </head>
+  <body>
+    <iframe id="cv" title="Cheat Chanmoniza CV"></iframe>
+    <p id="fallback" class="fallback" hidden>
+      The CV could not be shown here. <a id="dl" href="#" download>Download the CV</a>.
+    </p>
+
+    <script>
+      // The page that links here passes the PDF path: /cv-viewer.html?file=/your-file.pdf
+      // so this viewer always opens the same file as the Download button.
+      var DEFAULT_FILE = '/Cheat-Chanmoniza-Portfolio.pdf';
+      var file = new URLSearchParams(location.search).get('file') || DEFAULT_FILE;
+
+      // Safety: only allow a local PDF path
+      if (!/^\/[^\/].*\.pdf$/i.test(file) && file !== DEFAULT_FILE) file = DEFAULT_FILE;
+
+      var frame = document.getElementById('cv');
+      frame.src = file + '#view=FitH';
+      document.getElementById('dl').href = file;
+
+      // If the file does not exist, show the fallback instead of a blank page
+      fetch(file, { method: 'HEAD' })
+        .then(function (r) {
+          var type = r.headers.get('content-type') || '';
+          if (!r.ok || type.indexOf('pdf') === -1) {
+            frame.hidden = true;
+            document.getElementById('fallback').hidden = false;
+          }
+        })
+        .catch(function () {});
+    </script>
+  </body>
+</html>
